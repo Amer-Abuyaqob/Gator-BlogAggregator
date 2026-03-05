@@ -48,6 +48,12 @@ npm run build
 npm start
 ```
 
+When you run `npm start`, the CLI will:
+
+1. Set the current user name in the config file (using `setUser`).
+2. Read the configuration from `~/.gatorconfig.json` (using `readConfig`).
+3. Log the normalized config object to the console.
+
 ### Environment
 
 You may need a `.env` file with `DATABASE_URL` once the database chapter is implemented. See [PROJECT_DESC.md](PROJECT_DESC.md) for details.
