@@ -7,17 +7,20 @@ type Config = {
   currentUserName: string;
 };
 
+/**
+ * Resolves the absolute path to the config file in the user's home directory.
+ *
+ * @returns Full path to the `.gatorconfig.json` file.
+ */
 function getConfigFilePath(): string {
-  // TODO: joins the home directory with the filename .gatorconfig.json and returns the full path as a string.
-
+  const homeDir = os.homedir();
+  return path.join(homeDir, ".gatorconfig.json");
 }
 
 function writeConfig(cfg: Config): void {
   // TODO: converts the Config object back to snake_case keys and writes it to the file as JSON.
-
 }
 
 function validateConfig(rawConfig: any): Config {
   // TODO: checks that rawConfig has a valid db_url string, then maps it into a Config object and returns it.
-  
 }
