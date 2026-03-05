@@ -17,8 +17,22 @@ function getConfigFilePath(): string {
   return path.join(homeDir, ".gatorconfig.json");
 }
 
+/**
+ * Writes the config object to the config file as JSON with snake_case keys.
+ *
+ * @param cfg - Config object with camelCase keys to persist.
+ * @returns void
+ */
 function writeConfig(cfg: Config): void {
-  // TODO: converts the Config object back to snake_case keys and writes it to the file as JSON.
+  const rawConfig = {
+    db_url: cfg.dbUrl,
+    current_user_name: cfg.currentUserName,
+  };
+
+  const configPath = getConfigFilePath();
+  const fileContents = JSON.stringify(rawConfig, null, 2);
+
+  fs.writeFileSync(configPath, fileContents, { encoding: "utf-8" });
 }
 
 function validateConfig(rawConfig: any): Config {
