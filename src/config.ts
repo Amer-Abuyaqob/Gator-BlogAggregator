@@ -66,3 +66,17 @@ function validateConfig(rawConfig: any): Config {
     currentUserName,
   };
 }
+
+/**
+ * Reads, parses, and validates the config file from disk.
+ *
+ * @returns Normalized Config object loaded from the config file.
+ * @throws {Error} When the file cannot be read, the JSON is invalid, or validation fails.
+ */
+export function readConfig(): Config {
+  const configPath = getConfigFilePath();
+  const fileContents = fs.readFileSync(configPath, { encoding: "utf-8" });
+  const rawConfig = JSON.parse(fileContents);
+
+  return validateConfig(rawConfig);
+}
