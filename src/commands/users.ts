@@ -26,11 +26,5 @@ export function handlerLogin(_cmdName: string, ...args: string[]): void {
   }
 
   const userName = args[0];
-
-  try {
-    persistUserAndNotify(userName);
-  } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    console.error("Error:", message);
-  }
+  persistUserAndNotify(userName);
 }

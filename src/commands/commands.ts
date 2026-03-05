@@ -32,7 +32,6 @@ export function registerCommand(
 
 /**
  * Looks up and runs a command handler from the registry.
- * Handler errors are caught and logged to stderr.
  *
  * @param registry - The commands registry to query.
  * @param cmdName - The command name to run.
@@ -49,11 +48,5 @@ export function runCommand(
   if (handler === undefined) {
     throw new Error(`Unknown command: ${cmdName}`);
   }
-  
-  try {
-    handler(cmdName, ...args);
-  } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    console.error("Error:", message);
-  }
+  handler(cmdName, ...args);
 }
