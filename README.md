@@ -48,11 +48,22 @@ npm run build
 npm start
 ```
 
-When you run `npm start`, the CLI will:
+The CLI uses a command-based interface. Run with a command and optional args:
 
-1. Set the current user name in the config file (using `setUser`).
-2. Read the configuration from `~/.gatorconfig.json` (using `readConfig`).
-3. Log the normalized config object to the console.
+```bash
+node dist/main.js <command> [args]
+```
+
+**Commands:**
+
+| Command | Args         | Description                                       |
+| ------- | ------------ | ------------------------------------------------- |
+| `login` | `<username>` | Sets the current user in config (uses `setUser`). |
+
+**Examples:**
+
+- `node dist/main.js` → Usage message, exit code 1
+- `node dist/main.js login alice` → Sets user to `alice`, exit code 0
 
 ### Environment
 
