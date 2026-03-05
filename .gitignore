@@ -38,3 +38,5 @@ coverage/
 # Misc
 *.tgz
 PR.md
+
+connecting-to-database.txt
