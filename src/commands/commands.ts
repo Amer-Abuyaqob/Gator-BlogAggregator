@@ -13,3 +13,19 @@ export type CommandHandler = (cmdName: string, ...args: string[]) => void;
  * @property [key: string] - Command name as key; CommandHandler as value.
  */
 export type CommandsRegistry = Record<string, CommandHandler>;
+
+/**
+ * Registers a command handler in the registry.
+ *
+ * @param registry - The commands registry to update.
+ * @param cmdName - The command name to register.
+ * @param handler - The handler function for the command.
+ * @returns void
+ */
+export function registerCommand(
+  registry: CommandsRegistry,
+  cmdName: string,
+  handler: CommandHandler,
+): void {
+  registry[cmdName] = handler;
+}
