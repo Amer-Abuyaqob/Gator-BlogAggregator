@@ -80,3 +80,26 @@ export function readConfig(): Config {
 
   return validateConfig(rawConfig);
 }
+
+/**
+ * Updates the current user name in the config and persists it to disk.
+ *
+ * @param userName - New user name to store in the config.
+ * @returns void
+ * @throws {Error} When userName is empty or only whitespace.
+ */
+export function setUser(userName: string): void {
+  const trimmedUserName = userName.trim();
+  if (trimmedUserName.length === 0) {
+    throw new Error("Invalid user name: must be a non-empty string.");
+  }
+
+  const currentConfig = readConfig();
+
+  const updatedConfig: Config = {
+    ...currentConfig,
+    currentUserName: trimmedUserName,
+  };
+
+  writeConfig(updatedConfig);
+}
