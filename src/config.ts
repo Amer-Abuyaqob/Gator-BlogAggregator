@@ -35,6 +35,34 @@ function writeConfig(cfg: Config): void {
   fs.writeFileSync(configPath, fileContents, { encoding: "utf-8" });
 }
 
+/**
+ * Validates and normalizes a raw config object into a typed Config.
+ *
+ * @param rawConfig - Untrusted raw configuration object, typically parsed from JSON.
+ * @returns Normalized Config object with validated properties.
+ * @throws {Error} When db_url is missing or not a non-empty string.
+ */
 function validateConfig(rawConfig: any): Config {
-  // TODO: checks that rawConfig has a valid db_url string, then maps it into a Config object and returns it.
+  if (rawConfig === null || typeof rawConfig !== "object") {
+    throw new Error("Invalid config: expected an object.");
+  }
+
+  const dbUrl = rawConfig.db_url;
+
+  if (typeof dbUrl !== "string" || dbUrl.trim().length === 0) {
+    throw new Error("Invalid config: 'db_url' must be a non-empty string.");
+  }
+
+  // TODO: to be reviewed
+  const currentUserNameRaw = rawConfig.current_user_name;
+  const currentUserName =
+    typeof currentUserNameRaw === "string" &&
+    currentUserNameRaw.trim().length > 0
+      ? currentUserNameRaw
+      : os.userInfo().username;
+
+  return {
+    dbUrl: dbUrl.trim(),
+    currentUserName,
+  };
 }
