@@ -2,6 +2,8 @@
  * RSS types and utilities for fetching and parsing feeds.
  */
 
+import { XMLParser } from "fast-xml-parser";
+
 /**
  * Parsed RSS feed with channel metadata and items.
  *
@@ -53,6 +55,42 @@ async function fetchRawXml(url: string): Promise<string> {
 }
 
 /**
+ * Parses a raw XML string into an RSSFeed object.
+ *
+ * @param xmlString - Raw XML string from an RSS feed.
+ * @returns The parsed RSS feed.
+ * @throws {Error} When the XML is invalid or missing required RSS structure.
+ */
+function parseXmlToRssFeed(xmlString: string): RSSFeed {
+  const parser = new XMLParser();
+  const parsedData = parser.parse(xmlString);
+  const channel = parsedData?.rss?.channel;
+  if (!channel) {
+    throw new Error("Invalid RSS: missing rss.channel");
+  }
+  return {
+    channel: {
+      title: channel.title ?? "",
+      link: channel.link ?? "",
+      description: channel.description ?? "",
+      item: normalizeItems(channel.item),
+    },
+  };
+}
+
+/**
+ * Ensures items are always an array (fast-xml-parser returns a single object when there is only one item).
+ *
+ * @param item - Raw item or items from parsed channel.
+ * @returns Array of RSSItem.
+ */
+function normalizeItems(item: unknown): RSSItem[] {
+  if (item == null) return [];
+  if (Array.isArray(item)) return item as RSSItem[];
+  return [item as RSSItem];
+}
+
+/**
  * Fetches and parses an RSS feed from the given URL.
  *
  * @param url - The URL of the RSS feed to fetch.
@@ -61,7 +99,5 @@ async function fetchRawXml(url: string): Promise<string> {
  */
 export async function fetchFeed(url: string): Promise<RSSFeed> {
   const xmlString = await fetchRawXml(url);
-  // TODO: Parse xmlString to RSSFeed in next step
-  void xmlString;
-  throw new Error("Not implemented");
+  return parseXmlToRssFeed(xmlString);
 }
