@@ -56,10 +56,10 @@ node dist/main.js <command> [args]
 
 **Commands:**
 
-| Command     | Args         | Description                                                                 |
-| ----------- | ------------ | --------------------------------------------------------------------------- |
-| `login`     | `<username>` | Verifies user exists in DB, then sets the current user in config.           |
-| `register`  | `<username>` | Creates a new user in the DB and sets them as the current user in config.   |
+| Command    | Args         | Description                                                               |
+| ---------- | ------------ | ------------------------------------------------------------------------- |
+| `login`    | `<username>` | Verifies user exists in DB, then sets the current user in config.         |
+| `register` | `<username>` | Creates a new user in the DB and sets them as the current user in config. |
 
 **Examples:**
 
