@@ -56,14 +56,16 @@ node dist/main.js <command> [args]
 
 **Commands:**
 
-| Command | Args         | Description                                       |
-| ------- | ------------ | ------------------------------------------------- |
-| `login` | `<username>` | Sets the current user in config (uses `setUser`). |
+| Command     | Args         | Description                                                                 |
+| ----------- | ------------ | --------------------------------------------------------------------------- |
+| `login`     | `<username>` | Verifies user exists in DB, then sets the current user in config.           |
+| `register`  | `<username>` | Creates a new user in the DB and sets them as the current user in config.   |
 
 **Examples:**
 
 - `node dist/main.js` → Usage message, exit code 1
-- `node dist/main.js login alice` → Sets user to `alice`, exit code 0
+- `node dist/main.js login alice` → If `alice` exists in DB, sets user to `alice`, exit code 0
+- `node dist/main.js register bob` → Creates user `bob` in DB and sets as current user, exit code 0
 
 ### Database
 
@@ -97,4 +99,4 @@ For full project description, architecture, and requirements, see **[PROJECT_DES
 
 ---
 
-_Last updated: March 2026 — Drizzle schema and initial migration for `users` table added._
+_Last updated: March 2026 — Login/register use DB; central `db` client, user queries, and `process.exit(0)` after commands._
