@@ -70,11 +70,41 @@ function parseXmlToRssFeed(xmlString: string): RSSFeed {
   }
   return {
     channel: {
-      title: channel.title ?? "",
-      link: channel.link ?? "",
-      description: channel.description ?? "",
-      item: normalizeItems(channel.item),
+      title: extractText(channel.title),
+      link: extractText(channel.link),
+      description: extractText(channel.description),
+      item: toItemArray(channel.item).map(extractRssItem),
     },
+  };
+}
+
+/**
+ * Extracts a string from a parsed XML value (plain string or CDATA wrapped as { "#text": string }).
+ *
+ * @param val - Raw value from fast-xml-parser (string, { "#text": string }, or nullish).
+ * @returns Normalized string, or empty string if missing.
+ */
+function extractText(val: unknown): string {
+  if (val == null) return "";
+  if (typeof val === "string") return val;
+  const obj = val as Record<string, unknown>;
+  if (typeof obj["#text"] === "string") return obj["#text"];
+  return String(val);
+}
+
+/**
+ * Converts a raw parsed item into a normalized RSSItem.
+ *
+ * @param raw - Raw item object from parsed XML.
+ * @returns Normalized RSSItem with extracted fields.
+ */
+function extractRssItem(raw: unknown): RSSItem {
+  const item = (raw ?? {}) as Record<string, unknown>;
+  return {
+    title: extractText(item.title),
+    link: extractText(item.link),
+    description: extractText(item.description),
+    pubDate: extractText(item.pubDate),
   };
 }
 
@@ -82,12 +112,10 @@ function parseXmlToRssFeed(xmlString: string): RSSFeed {
  * Ensures items are always an array (fast-xml-parser returns a single object when there is only one item).
  *
  * @param item - Raw item or items from parsed channel.
- * @returns Array of RSSItem.
+ * @returns Array of raw items to be passed to extractRssItem.
  */
-function normalizeItems(item: unknown): RSSItem[] {
-  return item == null
-    ? []
-    : ((Array.isArray(item) ? item : [item]) as RSSItem[]);
+function toItemArray(item: unknown): unknown[] {
+  return item == null ? [] : Array.isArray(item) ? item : [item];
 }
 
 /**
