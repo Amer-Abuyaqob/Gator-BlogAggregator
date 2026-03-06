@@ -3,7 +3,7 @@ import {
   runCommand,
   type CommandsRegistry,
 } from "./commands/commands.js";
-import { handlerLogin } from "./commands/users.js";
+import { handlerLogin, handlerRegister } from "./commands/users.js";
 
 /**
  * Creates the command registry and registers all CLI commands.
@@ -13,6 +13,7 @@ import { handlerLogin } from "./commands/users.js";
 function createRegistry(): CommandsRegistry {
   const registry: CommandsRegistry = {};
   registerCommand(registry, "login", handlerLogin);
+  registerCommand(registry, "register", handlerRegister);
   return registry;
 }
 
@@ -70,6 +71,7 @@ async function main(): Promise<void> {
   const registry = createRegistry();
   const [cmdName, cmdArgs] = parseCliArgs();
   await executeCommand(registry, cmdName, cmdArgs);
+  process.exit(0);
 }
 
 main().catch((e) => {
