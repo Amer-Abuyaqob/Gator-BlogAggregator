@@ -85,9 +85,9 @@ function parseXmlToRssFeed(xmlString: string): RSSFeed {
  * @returns Array of RSSItem.
  */
 function normalizeItems(item: unknown): RSSItem[] {
-  if (item == null) return [];
-  if (Array.isArray(item)) return item as RSSItem[];
-  return [item as RSSItem];
+  return item == null
+    ? []
+    : ((Array.isArray(item) ? item : [item]) as RSSItem[]);
 }
 
 /**
