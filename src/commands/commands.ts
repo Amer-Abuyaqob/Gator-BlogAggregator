@@ -3,9 +3,12 @@
  *
  * @param cmdName - The command name to execute.
  * @param args - Variadic list of string arguments passed to the command.
- * @returns void
+ * @returns Promise that resolves when the command completes.
  */
-export type CommandHandler = (cmdName: string, ...args: string[]) => void;
+export type CommandHandler = (
+  cmdName: string,
+  ...args: string[]
+) => Promise<void>;
 
 /**
  * Registry mapping command names to their handler functions.
@@ -36,17 +39,17 @@ export function registerCommand(
  * @param registry - The commands registry to query.
  * @param cmdName - The command name to run.
  * @param args - Variadic list of string arguments for the command.
- * @returns void
+ * @returns Promise that resolves when the command handler completes.
  * @throws {Error} When the command is not registered (e.g., "Unknown command: xyz").
  */
-export function runCommand(
+export async function runCommand(
   registry: CommandsRegistry,
   cmdName: string,
   ...args: string[]
-): void {
+): Promise<void> {
   const handler = registry[cmdName];
   if (handler === undefined) {
     throw new Error(`Unknown command: ${cmdName}`);
   }
-  handler(cmdName, ...args);
+  await handler(cmdName, ...args);
 }

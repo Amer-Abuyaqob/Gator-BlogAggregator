@@ -1,4 +1,19 @@
+import { createUser, getUser } from "../lib/db/queries/users.js";
 import { setUser } from "../config.js";
+
+/**
+ * Ensures a user exists in the database; throws if not found.
+ *
+ * @param userName - The display name to look up.
+ * @returns Promise that resolves when the user exists.
+ * @throws {Error} When the user does not exist in the database.
+ */
+async function ensureUserExists(userName: string): Promise<void> {
+  const user = await getUser(userName);
+  if (user === undefined) {
+    throw new Error("Invalid login: User does not exist.");
+  }
+}
 
 /**
  * Persists the username to config and prints a success message.
@@ -12,19 +27,55 @@ function persistUserAndNotify(userName: string): void {
 }
 
 /**
- * Handles the login command. Sets the current user in the config.
+ * Handles the login command. Verifies the user exists in the database, then sets the current user in the config.
  *
  * @param _cmdName - The command name (unused).
  * @param args - Variadic list of arguments; first element is the username.
- * @returns void
+ * @returns Promise that resolves when the login completes.
+ * @throws {Error} When no username is provided or the user does not exist in the database.
  */
-export function handlerLogin(_cmdName: string, ...args: string[]): void {
-  if (args.length === 0) {
-    throw new Error(
-      "Invalid login credentials: username is required for login.",
-    );
-  }
-
-  const userName = args[0];
+export async function handlerLogin(
+  _cmdName: string,
+  ...args: string[]
+): Promise<void> {
+  const userName = parseUserName(args, "login");
+  await ensureUserExists(userName);
   persistUserAndNotify(userName);
+}
+
+/**
+ * Parses and validates the username from command args; throws if missing.
+ *
+ * @param args - Raw command arguments.
+ * @param context - Command context for error message ("login" or "register").
+ * @returns The trimmed username.
+ * @throws {Error} When args is empty or the first element is empty/whitespace.
+ */
+function parseUserName(args: string[], context: "login" | "register"): string {
+  if (args.length === 0 || !args[0]?.trim()) {
+    const message =
+      context === "login"
+        ? "Invalid login: username is required."
+        : "Invalid register: username is required.";
+    throw new Error(message);
+  }
+  return args[0].trim();
+}
+
+/**
+ * Handles the register command. Creates a new user in the database and sets them as current.
+ *
+ * @param _cmdName - The command name (unused).
+ * @param args - Variadic list of arguments; first element is the username.
+ * @returns Promise that resolves when registration completes.
+ * @throws {Error} When no username is provided or the username already exists (unique constraint).
+ */
+export async function handlerRegister(
+  _cmdName: string,
+  ...args: string[]
+): Promise<void> {
+  const userName = parseUserName(args, "register");
+  const user = await createUser(userName);
+  persistUserAndNotify(user.name);
+  console.log(`User ${user.name} was created successfully!`);
 }
