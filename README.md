@@ -65,12 +65,36 @@ node dist/main.js <command> [args]
 - `node dist/main.js` → Usage message, exit code 1
 - `node dist/main.js login alice` → Sets user to `alice`, exit code 0
 
+### Database
+
+Drizzle ORM is configured with:
+
+- **Schema:** `src/lib/db/schema.ts` (defines `users` table)
+- **Migrations:** `src/lib/db/migrations/`
+- **Config:** `drizzle.config.ts` (schema path, output dir, dialect, credentials)
+
+Apply migrations:
+
+```bash
+npx drizzle-kit push
+```
+
+Generate new migrations after schema changes:
+
+```bash
+npx drizzle-kit generate
+```
+
 ### Environment
 
-You may need a `.env` file with `DATABASE_URL` once the database chapter is implemented. See [PROJECT_DESC.md](PROJECT_DESC.md) for details.
+Configure database connection in `drizzle.config.ts` (`dbCredentials.url`) or via `DATABASE_URL` when wired up. See [PROJECT_DESC.md](PROJECT_DESC.md) for details.
 
 ---
 
 ## Documentation
 
 For full project description, architecture, and requirements, see **[PROJECT_DESC.md](PROJECT_DESC.md)**.
+
+---
+
+_Last updated: March 2026 — Drizzle schema and initial migration for `users` table added._
