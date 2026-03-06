@@ -56,11 +56,12 @@ node dist/main.js <command> [args]
 
 **Commands:**
 
-| Command    | Args         | Description                                                               |
-| ---------- | ------------ | ------------------------------------------------------------------------- |
-| `login`    | `<username>` | Verifies user exists in DB, then sets the current user in config.         |
-| `register` | `<username>` | Creates a new user in the DB and sets them as the current user in config. |
-| `reset`    | —            | Deletes all users from the DB; useful for dev/testing. Exit 0 on success. |
+| Command    | Args         | Description                                                                 |
+| ---------- | ------------ | --------------------------------------------------------------------------- |
+| `login`    | `<username>` | Verifies user exists in DB, then sets the current user in config.           |
+| `register` | `<username>` | Creates a new user in the DB and sets them as the current user in config.   |
+| `reset`    | —            | Deletes all users from the DB; useful for dev/testing. Exit 0 on success.   |
+| `users`    | —            | Lists all users from the DB; shows who is currently logged in as (current). |
 
 **Examples:**
 
@@ -68,6 +69,7 @@ node dist/main.js <command> [args]
 - `node dist/main.js login alice` → If `alice` exists in DB, sets user to `alice`, exit code 0
 - `node dist/main.js register bob` → Creates user `bob` in DB and sets as current user, exit code 0
 - `node dist/main.js reset` → Wipes all users from the DB and reports how many were deleted, exit code 0
+- `node dist/main.js users` → Lists all users; the current user is shown with `(current)`
 
 ### Database
 
@@ -101,4 +103,4 @@ For full project description, architecture, and requirements, see **[PROJECT_DES
 
 ---
 
-_Last updated: March 2026 — Login, register, and reset commands; central `db` client and user queries; exit codes 0/1._
+_Last updated: March 2026 — Login, register, reset, and users commands; central `db` client and user queries; exit codes 0/1._

@@ -4,7 +4,11 @@ import {
   type CommandsRegistry,
 } from "./commands/commands.js";
 import { handlerReset } from "./commands/reset.js";
-import { handlerLogin, handlerRegister } from "./commands/users.js";
+import {
+  handlerListUsers,
+  handlerLogin,
+  handlerRegister,
+} from "./commands/users.js";
 
 /**
  * Creates the command registry and registers all CLI commands.
@@ -16,6 +20,7 @@ function createRegistry(): CommandsRegistry {
   registerCommand(registry, "login", handlerLogin);
   registerCommand(registry, "register", handlerRegister);
   registerCommand(registry, "reset", handlerReset);
+  registerCommand(registry, "users", handlerListUsers);
   return registry;
 }
 

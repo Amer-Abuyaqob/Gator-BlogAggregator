@@ -1,6 +1,16 @@
-import { eq } from "drizzle-orm";
+import { eq, asc } from "drizzle-orm";
 import { db } from "../index.js";
 import { users } from "../schema.js";
+
+/**
+ * Returns all users from the database, ordered by name ascending.
+ *
+ * @returns Promise resolving to an array of user rows (id, createdAt, updatedAt, name).
+ * @throws {Error} When the database operation fails.
+ */
+export async function getUsers() {
+  return db.select().from(users).orderBy(asc(users.name));
+}
 
 /**
  * Deletes all rows from the users table.

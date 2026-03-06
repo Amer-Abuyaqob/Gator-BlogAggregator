@@ -1,5 +1,51 @@
-import { createUser, getUser } from "../lib/db/queries/users.js";
-import { setUser } from "../config.js";
+import { createUser, getUsers, getUser } from "../lib/db/queries/users.js";
+import { readConfig, setUser } from "../config.js";
+
+/**
+ * Formats a single user line for the list output.
+ *
+ * @param userName - The user's display name.
+ * @param isCurrent - Whether this user is the currently logged-in user.
+ * @returns A line in the form "* name" or "* name (current)".
+ */
+function formatUserLine(userName: string, isCurrent: boolean): string {
+  const suffix = isCurrent ? " (current)" : "";
+  return `* ${userName}${suffix}`;
+}
+
+/**
+ * Returns the currently logged-in user name from config, or empty string if unset or config read fails.
+ *
+ * @returns The current user name, or "" when none is set or config is unavailable.
+ */
+function getCurrentUserName(): string {
+  try {
+    const config = readConfig();
+    return config.currentUserName ?? "";
+  } catch {
+    return "";
+  }
+}
+
+/**
+ * Handles the users command. Lists all users from the database and marks the current user.
+ *
+ * @param _cmdName - The command name (unused).
+ * @param _args - Unused for this command.
+ * @returns Promise that resolves when the list has been printed.
+ */
+export async function handlerListUsers(
+  _cmdName: string,
+  ..._args: string[]
+): Promise<void> {
+  const allUsers = await getUsers();
+  const currentUserName = getCurrentUserName();
+
+  for (const user of allUsers) {
+    const line = formatUserLine(user.name, user.name === currentUserName);
+    console.log(line);
+  }
+}
 
 /**
  * Ensures a user exists in the database; throws if not found.
