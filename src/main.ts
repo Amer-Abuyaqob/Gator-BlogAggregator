@@ -46,14 +46,15 @@ function parseCliArgs(): [string, string[]] {
  * @param registry - The commands registry.
  * @param cmdName - The command name to run.
  * @param args - Arguments for the command.
+ * @returns Promise that resolves when the command completes.
  */
-function executeCommand(
+async function executeCommand(
   registry: CommandsRegistry,
   cmdName: string,
   args: string[],
-): void {
+): Promise<void> {
   try {
-    runCommand(registry, cmdName, ...args);
+    await runCommand(registry, cmdName, ...args);
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
     printErrorAndExit(`Error: ${message}`);
@@ -63,12 +64,15 @@ function executeCommand(
 /**
  * Entry point for the CLI application.
  *
- * @returns void
+ * @returns Promise that resolves when the CLI finishes.
  */
-function main(): void {
+async function main(): Promise<void> {
   const registry = createRegistry();
   const [cmdName, cmdArgs] = parseCliArgs();
-  executeCommand(registry, cmdName, cmdArgs);
+  await executeCommand(registry, cmdName, cmdArgs);
 }
 
-main();
+main().catch((e) => {
+  const message = e instanceof Error ? e.message : String(e);
+  printErrorAndExit(`Error: ${message}`);
+});

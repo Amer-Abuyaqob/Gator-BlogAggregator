@@ -16,9 +16,12 @@ function persistUserAndNotify(userName: string): void {
  *
  * @param _cmdName - The command name (unused).
  * @param args - Variadic list of arguments; first element is the username.
- * @returns void
+ * @returns Promise that resolves when the login completes.
  */
-export function handlerLogin(_cmdName: string, ...args: string[]): void {
+export async function handlerLogin(
+  _cmdName: string,
+  ...args: string[]
+): Promise<void> {
   if (args.length === 0) {
     throw new Error(
       "Invalid login credentials: username is required for login.",
