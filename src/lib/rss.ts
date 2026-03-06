@@ -31,6 +31,27 @@ export type RSSItem = {
   pubDate: string;
 };
 
+const USER_AGENT = "gator";
+
+/**
+ * Fetches the raw XML string from a URL.
+ *
+ * @param url - The URL to fetch.
+ * @returns Promise that resolves to the response body as a string.
+ * @throws {Error} When the fetch fails or the response is not ok.
+ */
+async function fetchRawXml(url: string): Promise<string> {
+  const response = await fetch(url, {
+    headers: {
+      "User-Agent": USER_AGENT,
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+  return response.text();
+}
+
 /**
  * Fetches and parses an RSS feed from the given URL.
  *
@@ -39,7 +60,8 @@ export type RSSItem = {
  * @throws {Error} When the fetch fails or the response cannot be parsed as RSS.
  */
 export async function fetchFeed(url: string): Promise<RSSFeed> {
-  // We will fill the body in the next steps
-  void url;
+  const xmlString = await fetchRawXml(url);
+  // TODO: Parse xmlString to RSSFeed in next step
+  void xmlString;
   throw new Error("Not implemented");
 }
