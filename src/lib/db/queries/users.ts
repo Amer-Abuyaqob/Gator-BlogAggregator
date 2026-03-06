@@ -3,6 +3,17 @@ import { db } from "../index.js";
 import { users } from "../schema.js";
 
 /**
+ * Deletes all rows from the users table.
+ *
+ * @returns The number of users that were deleted.
+ * @throws {Error} When the database operation fails.
+ */
+export async function deleteAllUsers(): Promise<number> {
+  const deleted = await db.delete(users).returning({ id: users.id });
+  return deleted.length;
+}
+
+/**
  * Inserts a new user into the database and returns the created row.
  *
  * @param name - The unique display name for the user.

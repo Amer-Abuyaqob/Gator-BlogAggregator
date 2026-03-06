@@ -3,6 +3,7 @@ import {
   runCommand,
   type CommandsRegistry,
 } from "./commands/commands.js";
+import { handlerReset } from "./commands/reset.js";
 import { handlerLogin, handlerRegister } from "./commands/users.js";
 
 /**
@@ -14,6 +15,7 @@ function createRegistry(): CommandsRegistry {
   const registry: CommandsRegistry = {};
   registerCommand(registry, "login", handlerLogin);
   registerCommand(registry, "register", handlerRegister);
+  registerCommand(registry, "reset", handlerReset);
   return registry;
 }
 
