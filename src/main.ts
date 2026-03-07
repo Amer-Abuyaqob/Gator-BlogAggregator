@@ -4,7 +4,7 @@ import {
   runCommand,
   type CommandsRegistry,
 } from "./commands/commands.js";
-import { handlerAddFeed } from "./commands/feeds.js";
+import { handlerAddFeed, handlerListFeeds } from "./commands/feeds.js";
 import { handlerReset } from "./commands/reset.js";
 import {
   handlerListUsers,
@@ -20,6 +20,7 @@ import {
 function createRegistry(): CommandsRegistry {
   const registry: CommandsRegistry = {};
   registerCommand(registry, "addfeed", handlerAddFeed);
+  registerCommand(registry, "feeds", handlerListFeeds);
   registerCommand(registry, "agg", handlerAgg);
   registerCommand(registry, "login", handlerLogin);
   registerCommand(registry, "register", handlerRegister);
