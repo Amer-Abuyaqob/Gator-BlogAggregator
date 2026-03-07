@@ -11,7 +11,10 @@ import { readConfig } from "../src/config.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const migrationsDir = path.join(__dirname, "../src/lib/db/migrations");
 
-async function runMigration(sql: postgres.Sql, filename: string): Promise<void> {
+async function runMigration(
+  sql: postgres.Sql,
+  filename: string,
+): Promise<void> {
   const migrationPath = path.join(migrationsDir, filename);
   if (!fs.existsSync(migrationPath)) return;
   let sqlContent = fs.readFileSync(migrationPath, "utf-8");
