@@ -15,6 +15,13 @@
       "when": 1772844387243,
       "tag": "0001_peaceful_the_hood",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1772930870000,
+      "tag": "0002_feed_follows",
+      "breakpoints": true
     }
   ]
 }
