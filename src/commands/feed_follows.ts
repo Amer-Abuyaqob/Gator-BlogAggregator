@@ -2,6 +2,7 @@ import { readConfig } from "../config.js";
 import { createFeedFollow, getFeedFollowsForUser } from "../lib/db/queries/feed_follows.js";
 import { getFeedByUrl } from "../lib/db/queries/feeds.js";
 import { getUser } from "../lib/db/queries/users.js";
+import { User } from "./feeds.js";
 
 /**
  * Returns the current user from the database; throws if not logged in or user not found.
@@ -9,7 +10,7 @@ import { getUser } from "../lib/db/queries/users.js";
  * @returns The current user from the database.
  * @throws {Error} When no user is logged in or the user does not exist in the database.
  */
-async function getCurrentUserFromDb() {
+async function getCurrentUserFromDb(): Promise<User> {
   const config = readConfig();
   const userName = config.currentUserName?.trim() ?? "";
   if (userName.length === 0) {
