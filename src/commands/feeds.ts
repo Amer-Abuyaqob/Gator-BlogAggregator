@@ -4,9 +4,7 @@ import {
   getAllFeedsWithUserNames,
   type FeedWithUserName,
 } from "../lib/db/queries/feeds.js";
-import { getUser } from "../lib/db/queries/users.js";
 import { feeds, users } from "../lib/db/schema.js";
-import { readConfig } from "../config.js";
 
 /** Inferred select type for the feeds table. */
 export type Feed = typeof feeds.$inferSelect;
@@ -54,25 +52,6 @@ export function printFeed(feed: Feed, user: User): void {
 }
 
 /**
- * Returns the current user from the database; throws if not logged in or user not found.
- *
- * @returns The current user from the database.
- * @throws {Error} When no user is logged in or the user does not exist in the database.
- */
-async function getCurrentUserFromDb(): Promise<User> {
-  const config = readConfig();
-  const userName = config.currentUserName?.trim() ?? "";
-  if (userName.length === 0) {
-    throw new Error("Must be logged in to add a feed. Use 'login' or 'register' first.");
-  }
-  const user = await getUser(userName);
-  if (user === undefined) {
-    throw new Error("Current user not found in database. Use 'login' or 'register' first.");
-  }
-  return user;
-}
-
-/**
  * Parses name and url from addfeed args; throws if either is missing.
  *
  * @param args - Raw command arguments.
@@ -93,15 +72,16 @@ function parseAddFeedArgs(args: string[]): { name: string; url: string } {
  * Handles the addfeed command. Creates a feed for the current user.
  *
  * @param _cmdName - The command name (unused).
+ * @param user - The authenticated user creating the feed.
  * @param args - Variadic list of arguments; first is name, second is url.
  * @returns Promise that resolves when the feed is created and printed.
- * @throws {Error} When not logged in, user not found, or name/url missing.
+ * @throws {Error} When name or url is missing.
  */
 export async function handlerAddFeed(
   _cmdName: string,
+  user: User,
   ...args: string[]
 ): Promise<void> {
-  const user = await getCurrentUserFromDb();
   const { name, url } = parseAddFeedArgs(args);
   const feed = await createFeed(name, url, user.id);
   await createFeedFollow(user.id, feed.id);
