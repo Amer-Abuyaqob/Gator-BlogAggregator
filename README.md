@@ -46,6 +46,9 @@ npm run build
 
 # Run
 npm start
+
+# Dev (migrations + build + run)
+npm run dev -- <command> [args]
 ```
 
 The CLI uses a command-based interface. Run with a command and optional args:
@@ -56,23 +59,23 @@ node dist/main.js <command> [args]
 
 **Commands:**
 
-| Command     | Args             | Description                                                                 |
-| ----------- | ---------------- | --------------------------------------------------------------------------- |
-| `addfeed`   | `<name>` `<url>` | Adds an RSS feed for the current user and auto-follows it. Requires login.  |
-| `agg`       | —                | Fetches the default RSS feed and prints the full feed object as JSON.       |
-| `feeds`     | —                | Lists all feeds in the DB with name, URL, and creator user name.            |
-| `follow`    | `<url>`          | Follows an existing feed by URL. Requires login.                            |
-| `following` | —                | Lists the feed names the current user follows. Requires login.              |
-| `unfollow`  | `<url>`          | Unfollows a feed by URL for the current user. Requires login.               |
-| `login`     | `<username>`     | Verifies user exists in DB, then sets the current user in config.           |
-| `register`  | `<username>`     | Creates a new user in the DB and sets them as the current user in config.   |
-| `reset`     | —                | Deletes all users from the DB; useful for dev/testing. Exit 0 on success.   |
-| `users`     | —                | Lists all users from the DB; shows who is currently logged in as (current). |
+| Command     | Args                  | Description                                                                                                  |
+| ----------- | --------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `addfeed`   | `<name>` `<url>`      | Adds an RSS feed for the current user and auto-follows it. Requires login.                                   |
+| `agg`       | `<time_between_reqs>` | Long-running aggregator. Fetches feeds from DB, prints post titles. Use `1s`, `5m`, `1h`. Stops with Ctrl+C. |
+| `feeds`     | —                     | Lists all feeds in the DB with name, URL, and creator user name.                                             |
+| `follow`    | `<url>`               | Follows an existing feed by URL. Requires login.                                                             |
+| `following` | —                     | Lists the feed names the current user follows. Requires login.                                               |
+| `unfollow`  | `<url>`               | Unfollows a feed by URL for the current user. Requires login.                                                |
+| `login`     | `<username>`          | Verifies user exists in DB, then sets the current user in config.                                            |
+| `register`  | `<username>`          | Creates a new user in the DB and sets them as the current user in config.                                    |
+| `reset`     | —                     | Deletes all users from the DB; useful for dev/testing. Exit 0 on success.                                    |
+| `users`     | —                     | Lists all users from the DB; shows who is currently logged in as (current).                                  |
 
 **Examples:**
 
 - `node dist/main.js` → Usage message, exit code 1
-- `node dist/main.js agg` → Fetches and prints the default RSS feed as JSON
+- `node dist/main.js agg 5s` → Fetches feeds every 5 seconds and prints post titles (Ctrl+C to stop)
 - `node dist/main.js login alice` → If `alice` exists in DB, sets user to `alice`, exit code 0
 - `node dist/main.js register bob` → Creates user `bob` in DB and sets as current user, exit code 0
 - `node dist/main.js reset` → Wipes all users from the DB and reports how many were deleted, exit code 0
@@ -121,4 +124,4 @@ For full project description, architecture, and requirements, see **[PROJECT_DES
 
 ---
 
-_Last updated: March 2026 — Config, database (users, feeds, feed_follows, reset), RSS feed fetching, `agg`, `addfeed`, `feeds`, `follow`, `following`, and `unfollow` commands; logged-in middleware for user commands; exit codes 0/1._
+_Last updated: March 2026 — Config, database (users, feeds, feed_follows, reset, last_fetched_at), RSS feed fetching, `agg` (long-running loop with time_between_reqs), `addfeed`, `feeds`, `follow`, `following`, `unfollow`; `dev` script runs migrations and build; exit codes 0/1._
