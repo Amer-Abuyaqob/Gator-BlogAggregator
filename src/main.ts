@@ -1,3 +1,4 @@
+import { handlerAgg } from "./commands/agg.js";
 import {
   registerCommand,
   runCommand,
@@ -17,6 +18,7 @@ import {
  */
 function createRegistry(): CommandsRegistry {
   const registry: CommandsRegistry = {};
+  registerCommand(registry, "agg", handlerAgg);
   registerCommand(registry, "login", handlerLogin);
   registerCommand(registry, "register", handlerRegister);
   registerCommand(registry, "reset", handlerReset);
