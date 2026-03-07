@@ -27,6 +27,7 @@ export const users = pgTable("users", {
  * @property name - Display name of the feed.
  * @property url - Unique URL of the feed.
  * @property userId - Foreign key to the user who added this feed; cascades on user delete.
+ * @property lastFetchedAt - Timestamp when the feed was last fetched; null if never fetched.
  */
 export const feeds = pgTable("feeds", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
@@ -40,6 +41,7 @@ export const feeds = pgTable("feeds", {
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
+  lastFetchedAt: timestamp("last_fetched_at"),
 });
 
 /**
