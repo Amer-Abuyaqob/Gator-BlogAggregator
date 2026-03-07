@@ -35,6 +35,20 @@ export async function getAllFeedsWithUserNames(): Promise<FeedWithUserName[]> {
 }
 
 /**
+ * Looks up a feed by its URL.
+ *
+ * @param url - The feed URL to search for.
+ * @returns The feed object if found, or undefined if no feed matches.
+ */
+export async function getFeedByUrl(url: string) {
+  const [result] = await db
+    .select()
+    .from(feeds)
+    .where(eq(feeds.url, url));
+  return result;
+}
+
+/**
  * Inserts a new feed into the database and returns the created row.
  *
  * @param name - The display name of the feed.

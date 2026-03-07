@@ -1,3 +1,4 @@
+import { createFeedFollow } from "../lib/db/queries/feed_follows.js";
 import {
   createFeed,
   getAllFeedsWithUserNames,
@@ -103,5 +104,6 @@ export async function handlerAddFeed(
   const user = await getCurrentUserFromDb();
   const { name, url } = parseAddFeedArgs(args);
   const feed = await createFeed(name, url, user.id);
+  await createFeedFollow(user.id, feed.id);
   printFeed(feed, user);
 }

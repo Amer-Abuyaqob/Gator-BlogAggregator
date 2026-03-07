@@ -4,6 +4,10 @@ import {
   runCommand,
   type CommandsRegistry,
 } from "./commands/commands.js";
+import {
+  handlerFollow,
+  handlerFollowing,
+} from "./commands/feed_follows.js";
 import { handlerAddFeed, handlerListFeeds } from "./commands/feeds.js";
 import { handlerReset } from "./commands/reset.js";
 import {
@@ -21,6 +25,8 @@ function createRegistry(): CommandsRegistry {
   const registry: CommandsRegistry = {};
   registerCommand(registry, "addfeed", handlerAddFeed);
   registerCommand(registry, "feeds", handlerListFeeds);
+  registerCommand(registry, "follow", handlerFollow);
+  registerCommand(registry, "following", handlerFollowing);
   registerCommand(registry, "agg", handlerAgg);
   registerCommand(registry, "login", handlerLogin);
   registerCommand(registry, "register", handlerRegister);
