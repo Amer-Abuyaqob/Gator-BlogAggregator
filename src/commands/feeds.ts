@@ -1,4 +1,8 @@
-import { createFeed } from "../lib/db/queries/feeds.js";
+import {
+  createFeed,
+  getAllFeedsWithUserNames,
+  type FeedWithUserName,
+} from "../lib/db/queries/feeds.js";
 import { getUser } from "../lib/db/queries/users.js";
 import { feeds, users } from "../lib/db/schema.js";
 import { readConfig } from "../config.js";
@@ -8,6 +12,33 @@ export type Feed = typeof feeds.$inferSelect;
 
 /** Inferred select type for the users table. */
 export type User = typeof users.$inferSelect;
+
+/**
+ * Prints a single feed row (name, URL, creator) to the console.
+ *
+ * @param row - The feed row with user name.
+ * @returns void
+ */
+function printFeedRow(row: FeedWithUserName): void {
+  console.log("Feed:", row.feedName, "| URL:", row.feedUrl, "| User:", row.userName);
+}
+
+/**
+ * Handles the feeds command. Prints all feeds in the database with name, URL, and creator.
+ *
+ * @param _cmdName - The command name (unused).
+ * @param _args - No arguments expected.
+ * @returns Promise that resolves when all feeds are printed.
+ */
+export async function handlerListFeeds(
+  _cmdName: string,
+  ..._args: string[]
+): Promise<void> {
+  const rows = await getAllFeedsWithUserNames();
+  for (const row of rows) {
+    printFeedRow(row);
+  }
+}
 
 /**
  * Logs the feed and user fields to the console.
