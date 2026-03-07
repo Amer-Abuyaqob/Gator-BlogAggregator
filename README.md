@@ -60,6 +60,7 @@ node dist/main.js <command> [args]
 | ---------- | ---------------- | --------------------------------------------------------------------------- |
 | `addfeed`  | `<name>` `<url>` | Adds an RSS feed for the current user. Requires login/register first.       |
 | `agg`      | —                | Fetches the default RSS feed and prints the full feed object as JSON.       |
+| `feeds`    | —                | Lists all feeds in the DB with name, URL, and creator user name.            |
 | `login`    | `<username>`     | Verifies user exists in DB, then sets the current user in config.           |
 | `register` | `<username>`     | Creates a new user in the DB and sets them as the current user in config.   |
 | `reset`    | —                | Deletes all users from the DB; useful for dev/testing. Exit 0 on success.   |
@@ -74,6 +75,7 @@ node dist/main.js <command> [args]
 - `node dist/main.js reset` → Wipes all users from the DB and reports how many were deleted, exit code 0
 - `node dist/main.js users` → Lists all users; the current user is shown with `(current)`
 - `node dist/main.js addfeed "Hacker News RSS" "https://hnrss.org/newest"` → Adds a feed for the current user
+- `node dist/main.js feeds` → Lists all feeds with name, URL, and creator
 
 ### Database
 
@@ -113,4 +115,4 @@ For full project description, architecture, and requirements, see **[PROJECT_DES
 
 ---
 
-_Last updated: March 2026 — Config, database (users, feeds, reset), RSS feed fetching, `agg` and `addfeed` commands; exit codes 0/1._
+_Last updated: March 2026 — Config, database (users, feeds, reset), RSS feed fetching, `agg`, `addfeed`, and `feeds` commands; exit codes 0/1._
