@@ -25,10 +25,12 @@ async function runMigration(
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : String(e);
     if (
-    msg.includes("already exists") ||
-    msg.includes("column \"last_fetched_at\" of relation \"feeds\" already exists")
-  ) {
-    console.log(`${filename}: already applied; skipped.`);
+      msg.includes("already exists") ||
+      msg.includes(
+        'column "last_fetched_at" of relation "feeds" already exists',
+      )
+    ) {
+      console.log(`${filename}: already applied; skipped.`);
     } else {
       throw e;
     }

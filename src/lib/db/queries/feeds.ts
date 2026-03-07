@@ -41,10 +41,7 @@ export async function getAllFeedsWithUserNames(): Promise<FeedWithUserName[]> {
  * @returns The feed object if found, or undefined if no feed matches.
  */
 export async function getFeedByUrl(url: string) {
-  const [result] = await db
-    .select()
-    .from(feeds)
-    .where(eq(feeds.url, url));
+  const [result] = await db.select().from(feeds).where(eq(feeds.url, url));
   return result;
 }
 
@@ -57,11 +54,7 @@ export async function getFeedByUrl(url: string) {
  * @returns The inserted feed object with id, createdAt, updatedAt, name, url, and userId.
  * @throws {Error} When the url violates uniqueness or other DB constraints.
  */
-export async function createFeed(
-  name: string,
-  url: string,
-  userId: string,
-) {
+export async function createFeed(name: string, url: string, userId: string) {
   const [result] = await db
     .insert(feeds)
     .values({ name, url, userId })
