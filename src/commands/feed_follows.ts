@@ -1,4 +1,8 @@
-import { createFeedFollow, getFeedFollowsForUser } from "../lib/db/queries/feed_follows.js";
+import {
+  createFeedFollow,
+  deleteFeedFollowByUserAndFeedUrl,
+  getFeedFollowsForUser,
+} from "../lib/db/queries/feed_follows.js";
 import { getFeedByUrl } from "../lib/db/queries/feeds.js";
 import { User } from "./feeds.js";
 
@@ -45,4 +49,25 @@ export async function handlerFollowing(
   for (const f of follows) {
     console.log(f.feedName);
   }
+}
+
+/**
+ * Handles the unfollow command. Deletes a feed follow for the current user by feed URL.
+ *
+ * @param _cmdName - The command name (unused).
+ * @param user - The authenticated user unfollowing the feed.
+ * @param args - Variadic list of arguments; first is the feed URL.
+ * @returns Promise that resolves when the unfollow completes.
+ * @throws {Error} When feed URL is missing or feed not found.
+ */
+export async function handlerUnfollow(
+  _cmdName: string,
+  user: User,
+  ...args: string[]
+): Promise<void> {
+  const url = args[0]?.trim();
+  if (!url) {
+    throw new Error("Invalid unfollow: url is required.");
+  }
+  await deleteFeedFollowByUserAndFeedUrl(user.id, url);
 }

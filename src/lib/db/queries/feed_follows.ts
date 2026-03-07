@@ -1,6 +1,7 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "../index.js";
 import { feedFollows, feeds, users } from "../schema.js";
+import { getFeedByUrl } from "./feeds.js";
 
 /**
  * Row shape returned by createFeedFollow and getFeedFollowsForUser.
@@ -85,4 +86,27 @@ export async function getFeedFollowsForUser(
     .innerJoin(users, eq(feedFollows.userId, users.id))
     .innerJoin(feeds, eq(feedFollows.feedId, feeds.id))
     .where(eq(feedFollows.userId, userId));
+}
+
+/**
+ * Deletes a feed follow record by user ID and feed URL.
+ *
+ * @param userId - The ID of the user who is unfollowing.
+ * @param feedUrl - The URL of the feed to unfollow.
+ * @returns The number of rows deleted.
+ * @throws {Error} When the feed is not found for the given URL.
+ */
+export async function deleteFeedFollowByUserAndFeedUrl(
+  userId: string,
+  feedUrl: string,
+): Promise<number> {
+  const feed = await getFeedByUrl(feedUrl);
+  if (!feed) {
+    throw new Error(`Feed not found with URL: ${feedUrl}`);
+  }
+  const deleted = await db
+    .delete(feedFollows)
+    .where(and(eq(feedFollows.userId, userId), eq(feedFollows.feedId, feed.id)))
+    .returning({ id: feedFollows.id });
+  return deleted.length;
 }

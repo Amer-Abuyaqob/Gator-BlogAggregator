@@ -63,6 +63,7 @@ node dist/main.js <command> [args]
 | `feeds`     | —                | Lists all feeds in the DB with name, URL, and creator user name.            |
 | `follow`    | `<url>`          | Follows an existing feed by URL. Requires login.                            |
 | `following` | —                | Lists the feed names the current user follows. Requires login.              |
+| `unfollow`  | `<url>`          | Unfollows a feed by URL for the current user. Requires login.               |
 | `login`     | `<username>`     | Verifies user exists in DB, then sets the current user in config.           |
 | `register`  | `<username>`     | Creates a new user in the DB and sets them as the current user in config.   |
 | `reset`     | —                | Deletes all users from the DB; useful for dev/testing. Exit 0 on success.   |
@@ -80,6 +81,7 @@ node dist/main.js <command> [args]
 - `node dist/main.js feeds` → Lists all feeds with name, URL, and creator
 - `node dist/main.js follow "https://hnrss.org/newest"` → Follows an existing feed by URL
 - `node dist/main.js following` → Lists feeds the current user follows
+- `node dist/main.js unfollow "https://hnrss.org/newest"` → Unfollows a feed by URL
 
 ### Database
 
@@ -119,4 +121,4 @@ For full project description, architecture, and requirements, see **[PROJECT_DES
 
 ---
 
-_Last updated: March 2026 — Config, database (users, feeds, feed_follows, reset), RSS feed fetching, `agg`, `addfeed`, `feeds`, `follow`, and `following` commands; logged-in middleware for user commands; exit codes 0/1._
+_Last updated: March 2026 — Config, database (users, feeds, feed_follows, reset), RSS feed fetching, `agg`, `addfeed`, `feeds`, `follow`, `following`, and `unfollow` commands; logged-in middleware for user commands; exit codes 0/1._
