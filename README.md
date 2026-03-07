@@ -119,4 +119,4 @@ For full project description, architecture, and requirements, see **[PROJECT_DES
 
 ---
 
-_Last updated: March 2026 — Config, database (users, feeds, feed_follows, reset), RSS feed fetching, `agg`, `addfeed`, `feeds`, `follow`, and `following` commands; exit codes 0/1._
+_Last updated: March 2026 — Config, database (users, feeds, feed_follows, reset), RSS feed fetching, `agg`, `addfeed`, `feeds`, `follow`, and `following` commands; logged-in middleware for user commands; exit codes 0/1._
