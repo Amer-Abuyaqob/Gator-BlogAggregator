@@ -56,13 +56,14 @@ node dist/main.js <command> [args]
 
 **Commands:**
 
-| Command    | Args         | Description                                                                 |
-| ---------- | ------------ | --------------------------------------------------------------------------- |
-| `agg`      | —            | Fetches the default RSS feed and prints the full feed object as JSON.       |
-| `login`    | `<username>` | Verifies user exists in DB, then sets the current user in config.           |
-| `register` | `<username>` | Creates a new user in the DB and sets them as the current user in config.   |
-| `reset`    | —            | Deletes all users from the DB; useful for dev/testing. Exit 0 on success.   |
-| `users`    | —            | Lists all users from the DB; shows who is currently logged in as (current). |
+| Command    | Args                    | Description                                                                 |
+| ---------- | ----------------------- | --------------------------------------------------------------------------- |
+| `addfeed`  | `<name>` `<url>`        | Adds an RSS feed for the current user. Requires login/register first.       |
+| `agg`      | —                       | Fetches the default RSS feed and prints the full feed object as JSON.       |
+| `login`    | `<username>`            | Verifies user exists in DB, then sets the current user in config.           |
+| `register` | `<username>`            | Creates a new user in the DB and sets them as the current user in config.   |
+| `reset`    | —                       | Deletes all users from the DB; useful for dev/testing. Exit 0 on success.   |
+| `users`    | —                       | Lists all users from the DB; shows who is currently logged in as (current). |
 
 **Examples:**
 
@@ -72,12 +73,13 @@ node dist/main.js <command> [args]
 - `node dist/main.js register bob` → Creates user `bob` in DB and sets as current user, exit code 0
 - `node dist/main.js reset` → Wipes all users from the DB and reports how many were deleted, exit code 0
 - `node dist/main.js users` → Lists all users; the current user is shown with `(current)`
+- `node dist/main.js addfeed "Hacker News RSS" "https://hnrss.org/newest"` → Adds a feed for the current user
 
 ### Database
 
 Drizzle ORM is configured with:
 
-- **Schema:** `src/lib/db/schema.ts` (defines `users` table)
+- **Schema:** `src/lib/db/schema.ts` (defines `users` and `feeds` tables)
 - **Migrations:** `src/lib/db/migrations/`
 - **Config:** `drizzle.config.ts` (schema path, output dir, dialect, credentials)
 
