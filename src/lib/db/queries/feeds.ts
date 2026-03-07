@@ -1,4 +1,4 @@
-import { asc, eq } from "drizzle-orm";
+import { asc, eq, sql } from "drizzle-orm";
 import { db } from "../index.js";
 import { feeds, users } from "../schema.js";
 
@@ -66,5 +66,37 @@ export async function createFeed(
     .insert(feeds)
     .values({ name, url, userId })
     .returning();
+  return result;
+}
+
+/**
+ * Sets last_fetched_at and updated_at to the current time for a feed.
+ *
+ * @param feedId - The ID of the feed to mark as fetched.
+ * @returns The updated feed row.
+ * @throws {Error} When the database operation fails.
+ */
+export async function markFeedFetched(feedId: string) {
+  const now = new Date();
+  const [result] = await db
+    .update(feeds)
+    .set({ lastFetchedAt: now, updatedAt: now })
+    .where(eq(feeds.id, feedId))
+    .returning();
+  return result;
+}
+
+/**
+ * Returns the next feed to fetch: oldest last_fetched_at first, or any never-fetched feed (null) first.
+ *
+ * @returns The feed row to fetch, or undefined if there are no feeds.
+ * @throws {Error} When the database operation fails.
+ */
+export async function getNextFeedToFetch() {
+  const [result] = await db
+    .select()
+    .from(feeds)
+    .orderBy(sql`${feeds.lastFetchedAt} ASC NULLS FIRST`)
+    .limit(1);
   return result;
 }
