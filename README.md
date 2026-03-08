@@ -62,7 +62,8 @@ node dist/main.js <command> [args]
 | Command     | Args                  | Description                                                                                                  |
 | ----------- | --------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `addfeed`   | `<name>` `<url>`      | Adds an RSS feed for the current user and auto-follows it. Requires login.                                   |
-| `agg`       | `<time_between_reqs>` | Long-running aggregator. Fetches feeds from DB, prints post titles. Use `1s`, `5m`, `1h`. Stops with Ctrl+C. |
+| `agg`       | `<time_between_reqs>` | Long-running aggregator. Fetches feeds and saves posts to DB. Use `1s`, `5m`, `1h`. Stops with Ctrl+C.       |
+| `browse`    | `[limit]`             | Lists latest posts from followed feeds. Optional limit (default 2). Requires login.                           |
 | `feeds`     | —                     | Lists all feeds in the DB with name, URL, and creator user name.                                             |
 | `follow`    | `<url>`               | Follows an existing feed by URL. Requires login.                                                             |
 | `following` | —                     | Lists the feed names the current user follows. Requires login.                                               |
@@ -75,7 +76,9 @@ node dist/main.js <command> [args]
 **Examples:**
 
 - `node dist/main.js` → Usage message, exit code 1
-- `node dist/main.js agg 5s` → Fetches feeds every 5 seconds and prints post titles (Ctrl+C to stop)
+- `node dist/main.js agg 5s` → Fetches feeds every 5 seconds and saves posts to DB (Ctrl+C to stop)
+- `node dist/main.js browse` → Lists 2 latest posts from followed feeds
+- `node dist/main.js browse 5` → Lists 5 latest posts
 - `node dist/main.js login alice` → If `alice` exists in DB, sets user to `alice`, exit code 0
 - `node dist/main.js register bob` → Creates user `bob` in DB and sets as current user, exit code 0
 - `node dist/main.js reset` → Wipes all users from the DB and reports how many were deleted, exit code 0
@@ -90,7 +93,7 @@ node dist/main.js <command> [args]
 
 Drizzle ORM is configured with:
 
-- **Schema:** `src/lib/db/schema.ts` (defines `users`, `feeds`, and `feed_follows` tables)
+- **Schema:** `src/lib/db/schema.ts` (defines `users`, `feeds`, `feed_follows`, and `posts` tables)
 - **Migrations:** `src/lib/db/migrations/`
 - **Config:** `drizzle.config.ts` (schema path, output dir, dialect, credentials)
 
@@ -124,4 +127,4 @@ For full project description, architecture, and requirements, see **[PROJECT_DES
 
 ---
 
-_Last updated: March 2026 — Config, database (users, feeds, feed_follows, reset, last_fetched_at), RSS feed fetching, `agg` (long-running loop with time_between_reqs), `addfeed`, `feeds`, `follow`, `following`, `unfollow`; `dev` script runs migrations and build; exit codes 0/1._
+_Last updated: March 2026 — Config, database (users, feeds, feed_follows, posts, reset, last_fetched_at), RSS feed fetching, `agg` (saves posts to DB), `addfeed`, `feeds`, `follow`, `following`, `unfollow`, `browse`; `dev` script runs migrations and build; exit codes 0/1._
