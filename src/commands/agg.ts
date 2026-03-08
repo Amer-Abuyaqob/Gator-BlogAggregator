@@ -2,7 +2,8 @@ import {
   getNextFeedToFetch,
   markFeedFetched,
 } from "../lib/db/queries/feeds.js";
-import { fetchFeed } from "../lib/rss.js";
+import { createPost } from "../lib/db/queries/posts.js";
+import { fetchFeed, parsePublishedAt } from "../lib/rss.js";
 
 /**
  * Parses a duration string (e.g. 1s, 1m, 1h) into milliseconds.
@@ -61,7 +62,14 @@ async function scrapeFeeds(): Promise<void> {
   const rssFeed = await fetchFeed(feed.url);
   const items = rssFeed.channel.item ?? [];
   for (const item of items) {
-    console.log(item.title);
+    if (!item.link?.trim()) continue;
+    await createPost(
+      item.title || "(no title)",
+      item.link.trim(),
+      feed.id,
+      item.description || null,
+      parsePublishedAt(item.pubDate),
+    );
   }
 }
 
