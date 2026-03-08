@@ -59,19 +59,19 @@ node dist/main.js <command> [args]
 
 **Commands:**
 
-| Command     | Args                  | Description                                                                                                  |
-| ----------- | --------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `addfeed`   | `<name>` `<url>`      | Adds an RSS feed for the current user and auto-follows it. Requires login.                                   |
-| `agg`       | `<time_between_reqs>` | Long-running aggregator. Fetches feeds and saves posts to DB. Use `1s`, `5m`, `1h`. Stops with Ctrl+C.       |
-| `browse`    | `[limit]`             | Lists latest posts from followed feeds. Optional limit (default 2). Requires login.                           |
-| `feeds`     | —                     | Lists all feeds in the DB with name, URL, and creator user name.                                             |
-| `follow`    | `<url>`               | Follows an existing feed by URL. Requires login.                                                             |
-| `following` | —                     | Lists the feed names the current user follows. Requires login.                                               |
-| `unfollow`  | `<url>`               | Unfollows a feed by URL for the current user. Requires login.                                                |
-| `login`     | `<username>`          | Verifies user exists in DB, then sets the current user in config.                                            |
-| `register`  | `<username>`          | Creates a new user in the DB and sets them as the current user in config.                                    |
-| `reset`     | —                     | Deletes all users from the DB; useful for dev/testing. Exit 0 on success.                                    |
-| `users`     | —                     | Lists all users from the DB; shows who is currently logged in as (current).                                  |
+| Command     | Args                  | Description                                                                                            |
+| ----------- | --------------------- | ------------------------------------------------------------------------------------------------------ |
+| `addfeed`   | `<name>` `<url>`      | Adds an RSS feed for the current user and auto-follows it. Requires login.                             |
+| `agg`       | `<time_between_reqs>` | Long-running aggregator. Fetches feeds and saves posts to DB. Use `1s`, `5m`, `1h`. Stops with Ctrl+C. |
+| `browse`    | `[limit]`             | Lists latest posts from followed feeds. Optional limit (default 2). Requires login.                    |
+| `feeds`     | —                     | Lists all feeds in the DB with name, URL, and creator user name.                                       |
+| `follow`    | `<url>`               | Follows an existing feed by URL. Requires login.                                                       |
+| `following` | —                     | Lists the feed names the current user follows. Requires login.                                         |
+| `unfollow`  | `<url>`               | Unfollows a feed by URL for the current user. Requires login.                                          |
+| `login`     | `<username>`          | Verifies user exists in DB, then sets the current user in config.                                      |
+| `register`  | `<username>`          | Creates a new user in the DB and sets them as the current user in config.                              |
+| `reset`     | —                     | Deletes all users from the DB; useful for dev/testing. Exit 0 on success.                              |
+| `users`     | —                     | Lists all users from the DB; shows who is currently logged in as (current).                            |
 
 **Examples:**
 
