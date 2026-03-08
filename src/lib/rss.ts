@@ -40,7 +40,9 @@ export type RSSItem = {
  * @param pubDateStr - Raw date string from feed (e.g. pubDate, updated).
  * @returns Parsed Date or null if invalid or empty.
  */
-export function parsePublishedAt(pubDateStr: string | null | undefined): Date | null {
+export function parsePublishedAt(
+  pubDateStr: string | null | undefined,
+): Date | null {
   const s = typeof pubDateStr === "string" ? pubDateStr.trim() : "";
   if (s.length === 0) return null;
   const parsed = Date.parse(s);

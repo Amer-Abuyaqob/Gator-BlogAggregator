@@ -1,10 +1,4 @@
-import {
-  pgTable,
-  text,
-  timestamp,
-  unique,
-  uuid,
-} from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, unique, uuid } from "drizzle-orm/pg-core";
 
 /**
  * Drizzle schema for the `users` table.

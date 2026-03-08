@@ -78,10 +78,7 @@ export async function getPostsForUser(
     .from(posts)
     .innerJoin(feeds, eq(posts.feedId, feeds.id))
     .where(inArray(posts.feedId, feedIds))
-    .orderBy(
-      sql`${posts.publishedAt} DESC NULLS LAST`,
-      desc(posts.createdAt),
-    )
+    .orderBy(sql`${posts.publishedAt} DESC NULLS LAST`, desc(posts.createdAt))
     .limit(limit);
   return rows;
 }
