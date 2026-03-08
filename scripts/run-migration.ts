@@ -43,6 +43,7 @@ async function main() {
   await runMigration(sql, "0001_feeds.sql");
   await runMigration(sql, "0002_feed_follows.sql");
   await runMigration(sql, "0003_add_last_fetched_at.sql");
+  await runMigration(sql, "0004_add_posts.sql");
   await sql.end();
 }
 

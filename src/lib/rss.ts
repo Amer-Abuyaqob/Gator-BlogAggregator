@@ -24,7 +24,7 @@ export type RSSFeed = {
  * @property title - The entry title.
  * @property link - The entry URL.
  * @property description - The entry description or content summary.
- * @property pubDate - Publication date string (ISO 8601 or RSS format).
+ * @property pubDate - Publication date string (ISO 8601, RFC 2822, or other format).
  */
 export type RSSItem = {
   title: string;
@@ -32,6 +32,23 @@ export type RSSItem = {
   description: string;
   pubDate: string;
 };
+
+/**
+ * Parses a publication date string from RSS feeds into a Date.
+ * Handles ISO 8601, RFC 2822, and common variants.
+ *
+ * @param pubDateStr - Raw date string from feed (e.g. pubDate, updated).
+ * @returns Parsed Date or null if invalid or empty.
+ */
+export function parsePublishedAt(
+  pubDateStr: string | null | undefined,
+): Date | null {
+  const s = typeof pubDateStr === "string" ? pubDateStr.trim() : "";
+  if (s.length === 0) return null;
+  const parsed = Date.parse(s);
+  if (Number.isNaN(parsed)) return null;
+  return new Date(parsed);
+}
 
 const USER_AGENT = "gator";
 
@@ -93,6 +110,21 @@ function extractText(val: unknown): string {
 }
 
 /**
+ * Extracts a publication date string from an item, trying common field names.
+ *
+ * @param item - Raw item object from parsed XML.
+ * @returns First non-empty date string, or empty string if none found.
+ */
+function extractPubDateString(item: Record<string, unknown>): string {
+  const keys = ["pubDate", "published", "updated", "dc:date"];
+  for (const key of keys) {
+    const val = extractText(item[key]);
+    if (val.length > 0) return val;
+  }
+  return "";
+}
+
+/**
  * Converts a raw parsed item into a normalized RSSItem.
  *
  * @param raw - Raw item object from parsed XML.
@@ -104,7 +136,7 @@ function extractRssItem(raw: unknown): RSSItem {
     title: extractText(item.title),
     link: extractText(item.link),
     description: extractText(item.description),
-    pubDate: extractText(item.pubDate),
+    pubDate: extractPubDateString(item),
   };
 }
 

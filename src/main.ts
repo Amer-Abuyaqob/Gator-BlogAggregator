@@ -9,6 +9,7 @@ import {
   handlerFollowing,
   handlerUnfollow,
 } from "./commands/feed_follows.js";
+import { handlerBrowse } from "./commands/browse.js";
 import { handlerAddFeed, handlerListFeeds } from "./commands/feeds.js";
 import { middlewareLoggedIn } from "./commands/middleware.js";
 import { handlerReset } from "./commands/reset.js";
@@ -26,6 +27,7 @@ import {
 function createRegistry(): CommandsRegistry {
   const registry: CommandsRegistry = {};
   registerCommand(registry, "addfeed", middlewareLoggedIn(handlerAddFeed));
+  registerCommand(registry, "browse", middlewareLoggedIn(handlerBrowse));
   registerCommand(registry, "feeds", handlerListFeeds);
   registerCommand(registry, "follow", middlewareLoggedIn(handlerFollow));
   registerCommand(registry, "following", middlewareLoggedIn(handlerFollowing));

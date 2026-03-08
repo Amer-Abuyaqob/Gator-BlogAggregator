@@ -72,3 +72,32 @@ export const feedFollows = pgTable(
   },
   (table) => [unique().on(table.userId, table.feedId)],
 );
+
+/**
+ * Drizzle schema for the `posts` table.
+ * Stores individual entries from RSS feeds.
+ *
+ * @property id - UUID primary key, auto-generated.
+ * @property createdAt - Timestamp when the row was created.
+ * @property updatedAt - Timestamp; auto-updates on row change.
+ * @property title - Title of the post.
+ * @property url - Unique URL of the post.
+ * @property description - Description or content summary; null if missing.
+ * @property publishedAt - When the post was published; null if unknown.
+ * @property feedId - Foreign key to the feed; cascades on feed delete.
+ */
+export const posts = pgTable("posts", {
+  id: uuid("id").primaryKey().defaultRandom().notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+  title: text("title").notNull(),
+  url: text("url").notNull().unique(),
+  description: text("description"),
+  publishedAt: timestamp("published_at"),
+  feedId: uuid("feed_id")
+    .notNull()
+    .references(() => feeds.id, { onDelete: "cascade" }),
+});
